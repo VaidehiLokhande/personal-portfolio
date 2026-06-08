@@ -2,123 +2,115 @@ const router = require('express').Router();
 const db = require('../config/db');
 
 // GET all projects
-router.get('/', (req, res) => {
-db.query(
-'SELECT * FROM projects ORDER BY featured DESC, id ASC',
-(err, results) => {
-if (err) return res.status(500).json({ error: err.message });
-res.json(results);
-}
-);
+router.get('/', async (req, res) => {
+  try {
+    const result = await db.query(
+      'SELECT * FROM projects ORDER BY id ASC'
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // GET single project
-router.get('/:id', (req, res) => {
-db.query(
-'SELECT * FROM projects WHERE id = ?',
-[req.params.id],
-(err, results) => {
-if (err) return res.status(500).json({ error: err.message });
+router.get('/:id', async (req, res) => {
+  try {
+    const result = await db.query(
+      'SELECT * FROM projects WHERE id = $1',
+      [req.params.id]
+    );
 
-```
-  if (results.length === 0) {
-    return res.status(404).json({ error: 'Project not found' });
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-
-  res.json(results[0]);
-}
-```
-
-});
 });
 
 // POST create project
-router.post('/', (req, res) => {
-const {
-title,
-description,
-techStack,
-githubUrl,
-liveUrl,
-featured
-} = req.body;
+router.post('/', async (req, res) => {
+  try {
+    const {
+      title,
+      technologies,
+      description,
+      github_link
+    } = req.body;
 
-db.query(
-`INSERT INTO projects
-    (title, description, techStack, githubUrl, liveUrl, featured)
-    VALUES (?, ?, ?, ?, ?, ?)`,
-[
-title,
-description,
-techStack,
-githubUrl,
-liveUrl,
-featured || false
-],
-(err, result) => {
-if (err) return res.status(500).json({ error: err.message });
+    const result = await db.query(
+      `INSERT INTO projects
+      (title, technologies, description, github_link)
+      VALUES ($1, $2, $3, $4)
+      RETURNING id`,
+      [
+        title,
+        technologies,
+        description,
+        github_link
+      ]
+    );
 
-```
-  res.status(201).json({
-    message: 'Project created',
-    id: result.insertId
-  });
-}
-```
+    res.status(201).json({
+      message: 'Project created',
+      id: result.rows[0].id
+    });
 
-});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // PUT update project
-router.put('/:id', (req, res) => {
-const {
-title,
-description,
-techStack,
-githubUrl,
-liveUrl,
-featured
-} = req.body;
+router.put('/:id', async (req, res) => {
+  try {
+    const {
+      title,
+      technologies,
+      description,
+      github_link
+    } = req.body;
 
-db.query(
-`UPDATE projects
-     SET title=?, description=?, techStack=?,
-         githubUrl=?, liveUrl=?, featured=?
-     WHERE id=?`,
-[
-title,
-description,
-techStack,
-githubUrl,
-liveUrl,
-featured,
-req.params.id
-],
-(err) => {
-if (err) return res.status(500).json({ error: err.message });
+    await db.query(
+      `UPDATE projects
+       SET title=$1,
+           technologies=$2,
+           description=$3,
+           github_link=$4
+       WHERE id=$5`,
+      [
+        title,
+        technologies,
+        description,
+        github_link,
+        req.params.id
+      ]
+    );
 
-```
-  res.json({ message: 'Project updated' });
-}
-```
+    res.json({ message: 'Project updated' });
 
-});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // DELETE project
-router.delete('/:id', (req, res) => {
-db.query(
-'DELETE FROM projects WHERE id=?',
-[req.params.id],
-(err) => {
-if (err) return res.status(500).json({ error: err.message });
+router.delete('/:id', async (req, res) => {
+  try {
+    await db.query(
+      'DELETE FROM projects WHERE id = $1',
+      [req.params.id]
+    );
 
-```
-  res.json({ message: 'Project deleted' });
-}
-```
+    res.json({ message: 'Project deleted' });
 
-});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;

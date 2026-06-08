@@ -3,11 +3,13 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 dotenv.config();
-require('./config/db'); // MySQL connection
+require('./config/db');
 
 const app = express();
 
 // Middleware
+app.use(express.json());
+
 app.use(cors({
   origin: [
     "http://localhost:5173",
@@ -18,7 +20,8 @@ app.use(cors({
 
 // Routes
 app.use('/api/projects', require('./routes/projects'));
-app.use('/api/contact', require('./routes/contact'));
+
+// app.use('/api/contact', require('./routes/contact'));
 
 // Health check
 app.get('/', (req, res) => {
