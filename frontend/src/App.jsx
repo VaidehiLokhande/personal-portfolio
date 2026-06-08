@@ -5,7 +5,8 @@ import myResume from "./Resume_vaidu.pdf";
 import Profile from "./assets/Profile.png";
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaGithub, FaLinkedin } from "react-icons/fa";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API = import.meta.env.VITE_API_URL;
+
 
 function App() {
   const [projects, setProjects] = useState([]);
@@ -13,37 +14,15 @@ function App() {
   const [status, setStatus] = useState("");
   const [activeSection, setActiveSection] = useState("home");
   useEffect(() => {
-    fetch(`${API}/projects`)
-      .then((r) => r.json())
-      .then((data) => {
-        console.log("🔥 API DATA:", data);
-        setProjects(data);
-      })
-      .catch((err) => {
-        console.log("❌ ERROR:", err);
-        setProjects([]);
-      });
-  }, []);
-  const handleContact = async (e) => {
-    e.preventDefault();
-    setStatus("Sending...");
-    try {
-      const res = await fetch(`${API}/contact`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setStatus(data.message);
-        setForm({ name: "", email: "", subject: "", message: "" });
-      } else {
-        setStatus(data.error || "Something went wrong.");
-      }
-    } catch {
-      setStatus("Network error. Please try again.");
-    }
-  };
+ fetch(`${API}/projects`)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      setProjects(data);
+    })
+    .catch(err => console.error("❌ ERROR:", err));
+}, []);
+  
 
  const staticProjects = [
   {
