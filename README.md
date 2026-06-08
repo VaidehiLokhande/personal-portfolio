@@ -16,3 +16,9 @@ Features:
 * Database integration
 * Live deployment
 * Professional portfolio presentation
+
+1. Live Frontend URL
+https://personal-portfolio-one-gamma-13.vercel.app
+
+Live Backend URL
+https://personal-portfolio-ioy1.onrender.com
