@@ -1,3 +1,18 @@
-# Personal Portfolio Website
+Personal Portfolio Website
 
-Full Stack Personal Portfolio Website built using React, Node.js, Express and MySQL.
+A full-stack portfolio website developed using React.js, Node.js, Express.js, and PostgreSQL. The website showcases personal projects, technical skills, educational background, and contact information. The project includes frontend-backend integration, database connectivity, and deployment using Vercel and Render.
+
+Technologies Used:
+
+* Frontend: React.js, CSS, JavaScript
+* Backend: Node.js, Express.js
+* Database: PostgreSQL (Supabase)
+* Deployment: Vercel, Render
+
+Features:
+
+* Responsive portfolio design
+* Dynamic project management using API
+* Database integration
+* Live deployment
+* Professional portfolio presentation
