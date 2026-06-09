@@ -7,28 +7,28 @@ require('./config/db');
 
 const app = express();
 
-// Middleware
-app.use(express.json());
-
+// ✅ CORS (FINAL FIX)
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://your-portfolio.vercel.app"
+    "https://personal-portfolio-one-gamma-13.vercel.app"
   ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
-// Routes
-app.use('/api/projects', require('./routes/projects'));
+app.use(express.json());
 
-// app.use('/api/contact', require('./routes/contact'));
+// ✅ ROUTES
+app.use('/api/projects', require('./routes/projects'));
 
 // Health check
 app.get('/', (req, res) => {
   res.json({ message: 'Portfolio API running ✅' });
 });
 
-// Start Server
-app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server running on port ${process.env.PORT || 5000}`);
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
