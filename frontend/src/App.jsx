@@ -123,7 +123,7 @@ function App() {
         </div>
 
         <h1>
-          Hi, I'm <span>Vaidehi</span>
+          Hi, I'm <span>Vaidehi Lokhande</span>
         </h1>
 
         <div className="hero-text">
