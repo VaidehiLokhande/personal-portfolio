@@ -1,27 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./App.css";
 import myResume from "./Resume_vaidu.pdf";
 
 import Profile from "./assets/Profile.png";
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaGithub, FaLinkedin } from "react-icons/fa";
 
-const API = import.meta.env.VITE_API_URL;
 
 
 function App() {
-  const [projects, setProjects] = useState([]);
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
-  const [status, setStatus] = useState("");
+  
   const [activeSection, setActiveSection] = useState("home");
-  useEffect(() => {
- fetch(`${API}/projects`)
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-      setProjects(data);
-    })
-    .catch(err => console.error("❌ ERROR:", err));
-}, []);
   
 
  const staticProjects = [
@@ -286,40 +274,7 @@ function App() {
     <div className="projects-grid">
 
       {/* API projects */}
-      {projects.length > 0 ? (
-        projects.map((p) => (
-          <div className="project-card" key={p.id || p.title}>
-
-            {/* Tech Stack */}
-            <div className="project-tag">
-              {p.techStack?.replaceAll(",", " · ")}
-            </div>
-
-            {/* Title */}
-            <h3>{p.title}</h3>
-
-            {/* Description */}
-            <p>{p.description}</p>
-
-            {/* Links */}
-            <div className="project-links">
-
-              
-              {p.githubUrl && (
-                <a
-                  className="project-link"
-                  href={p.githubUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  GitHub
-                </a>
-              )}
-
-            </div>
-          </div>
-        ))
-      ) : (
+     {(
         /* fallback UI */
         staticProjects.map((p) => (
           <div className="project-card" key={p.title}>
@@ -386,11 +341,19 @@ function App() {
         <FaEnvelope /> Send Email
       </a>
 
-      <a href="https://linkedin.com" target="_blank" rel="noreferrer">
+      <a
+  href="https://www.linkedin.com/in/vaidehi-lokhande-b3253b383/"
+  target="_blank"
+  rel="noreferrer"
+>
         <FaLinkedin /> LinkedIn
       </a>
 
-      <a href="https://github.com" target="_blank" rel="noreferrer">
+     <a
+  href="https://github.com/VaidehiLokhande"
+  target="_blank"
+  rel="noreferrer"
+>
         <FaGithub /> GitHub
       </a>
 
@@ -399,7 +362,8 @@ function App() {
   </section>
 )}
 
-      <footer>Built with React + Node.js + MySQL &nbsp;·&nbsp; © 2026 Vaidehi Lokhande</footer>
+      <footer>Designed & Developed by Vaidehi Lokhande
+© 2026 All Rights Reserved</footer>
     </div>
   );
 }
